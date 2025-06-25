@@ -96,12 +96,13 @@ Under `examples/`, you’ll find three scripts illustrating common workflows:
 
 > NOTE: any sampler that can execute Groovy/Java will work, not just JSR223!
 
-![The workflow visualization](imags/workflow.jpg)
+![The workflow visualization](imgs/workflow.jpg)
 
 #### 5) Configure Case and Step Samplers
 Case creation script doesn't require any additional configuration and has no specifics.
 Just point to the .groovy file and it's ready to go.
-![The Case creation](imags/allureCase.jpg)
+
+![The Case creation](imgs/allureCase.jpg)
 
 Step creation script takes:
 - step-level comment
@@ -110,14 +111,14 @@ Step creation script takes:
 > Value from the sampler’s “Comments” field to populate Step parameters
 > NOTE: if parameter name (key) is not provided, the `Action` will be used as default
 
-![The Case commenting](imags/allureStepComment.jpg)
+![The Case commenting](imgs/allureStepComment.jpg)
 
 - last step identification
 > To indentify that the current step is the last step for the Case we use parameters:
 > "start" and "continue" Strings are **optional** and just serve visually appealing purpose
 > "stop" String is **mandatory** and is used to trigger JSON and attachment creation
 
-![The Case creation](imags/allureStep.jpg)
+![The Case creation](imgs/allureStep.jpg)
 
 #### 6) Report generation
 Place `GenerateReport.groovy` in your TearDown Thread Group. It consumes the JSON and attachments, invokes the Allure CLI to generate the report, and then cleans up the artifacts.
