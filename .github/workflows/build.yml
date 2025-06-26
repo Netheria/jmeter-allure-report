@@ -5,15 +5,14 @@ on:
     branches:
       - main
     tags:
-      - 'v*.*.*'       # “whenever a tag like v1.2.3” is pushed
-  workflow_dispatch:   # still allow manual runs
+      - 'v*.*.*'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      # 1. Grab your code
+      # 1. Grab code
       - uses: actions/checkout@v3
 
       # 2. Install Java 8
@@ -23,11 +22,11 @@ jobs:
           java-version: '8'
           distribution: 'temurin'
 
-      # 3. Build your project
+      # 3. Build jars
       - name: Build with Maven
         run: mvn clean package --batch-mode
 
-      # 4. Upload the resulting JAR(s) so you can download them from the Actions run
+      # 4. Upload builded jars
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -37,33 +36,23 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    # only run this job when the workflow was triggered by a tag push
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
-      - uses: actions/checkout@v3
-
-      # Download the artifact from the ‘build’ job
+      # 5. Dowload the artifact from the ‘build’ job
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: jmeter-allure-report
+          path: target
 
-      # 6a. Create a GitHub Release
-      - name: Create GitHub Release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ github.ref }}
-          name: Release ${{ github.ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # 6b. Upload the JAR to that Release
-      - name: Upload JAR to Release
+      # 6. Create a GitHub Release and upload jar asset
+      - name: Create Release and Upload JAR
         uses: softprops/action-gh-release@v1
         with:
           files: target/*.jar
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          update: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
