@@ -108,7 +108,9 @@ Step creation script takes:
 - step-level comment
 
 Allure Report doesn't have any direct field in the Step object which could be used to add comments.
+
 But, we can improvise and use step level parameters for this.
+
 Value from the sampler’s “Comments” field to populate Step parameters
 
 > NOTE: if parameter name (key) is not provided, the `Action` will be used as default
@@ -118,7 +120,9 @@ Value from the sampler’s “Comments” field to populate Step parameters
 - last step identification
 
 To indentify that the current step is the last step for the Case we use parameters:
+
 "start" and "continue" Strings are **optional** and just serve visually appealing purpose
+
 "stop" String is **mandatory** and is used to trigger JSON and attachment creation
 
 ![The Case creation](imgs/allureStep.jpg)
